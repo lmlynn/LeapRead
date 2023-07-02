@@ -1,0 +1,48 @@
+import re
+
+
+def color_code_vowel_sounds(text):
+    vowel_sound_colors = {
+        'a': '\033[91m',         # Red
+        'ā': '\033[93m',         # Light Orange
+        'e': '\033[92m',         # Light Green
+        'ē': '\033[32m',         # Dark Green
+        'i': '\033[95m',         # Violet
+        'ī': '\033[35m',         # Purple
+        'o': '\033[96m',         # Light Blue
+        'ō': '\033[31m',         # Dark Pink
+        'u': '\033[96m',         # Light Blue
+        'ū': '\033[34m',         # Dark Blue
+        'ea': '\033[93m',        # Light Orange
+        'ee': '\033[32m',        # Dark Green
+        'ou': '\033[91m',        # Red (same as short "a")
+        'oo': '\033[96m',        # Light Blue
+        'oe': '\033[31m'         # Dark Pink
+    }
+
+    # Define vowel sound patterns
+    vowel_sound_patterns = [
+        (r'a(?![āeiou])', 'a'),              # Matches short "a" not followed by another vowel
+        (r'ā|ea', 'ā'),                       # Matches long "ā" and "ea" (vowel group)
+        (r'e(?![āeiou])', 'e'),              # Matches short "e" not followed by another vowel
+        (r'ē|ee', 'ē'),                       # Matches long "ē" and "ee" (vowel group)
+        (r'i(?![āeiou])', 'i'),              # Matches short "i" not followed by another vowel
+        (r'ī', 'ī'),                         # Matches long "ī"
+        (r'o(?![āeiou])', 'o'),              # Matches short "o" not followed by another vowel
+        (r'ō|oe', 'ō'),                       # Matches long "ō" and "oe" (vowel group)
+        (r'u(?![āeiou])', 'u'),              # Matches short "u" not followed by another vowel
+        (r'ū', 'ū'),                         # Matches long "ū"
+        (r'ou', 'ou'),                       # Matches "ou" (vowel group)
+        (r'oo', 'oo')                        # Matches "oo" (vowel group)
+    ]
+
+    colored_text = text
+    for pattern, vowel_sound in vowel_sound_patterns:
+        colored_text = re.sub(pattern, vowel_sound_colors.get(vowel_sound, '\033[31m') + '\\g<0>\033[0m', colored_text, flags=re.IGNORECASE)
+
+    return colored_text
+
+
+user_input = input("Enter a sentence or paragraph: ")
+colored_output = color_code_vowel_sounds(user_input)
+print(colored_output)
